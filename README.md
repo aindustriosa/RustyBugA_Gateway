@@ -1,4 +1,4 @@
-# WiFi Serial Gateway for the RustyBugA
+# WiFi Serial Gateway for the [RustyBugA](https://github.com/aindustriosa/RustyBugA-board#)
 
 Firmware and tools for a Seeed Studio XIAO C3 based serial gateway that uses WiFi as wireless interface.
 
