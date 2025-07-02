@@ -82,7 +82,7 @@
 		(tenting front back)
 		(aux_axis_origin 66 56)
 		(pcbplotparams
-			(layerselection 0x00000000_00000000_55555555_5755f5ff)
+			(layerselection 0x00000000_00000000_55555555_57555551)
 			(plot_on_all_layers_selection 0x00000000_00000000_00000000_00000000)
 			(disableapertmacros no)
 			(usegerberextensions no)
@@ -118,7 +118,7 @@
 			(mirror no)
 			(drillshape 0)
 			(scaleselection 1)
-			(outputdirectory "")
+			(outputdirectory "./")
 		)
 	)
 	(net 0 "")
@@ -702,7 +702,7 @@
 		)
 		(property "Value" "Vcc Jumper"
 			(at -4.5 0 180)
-			(layer "F.SilkS")
+			(layer "F.Cu")
 			(uuid "85a236ae-0d01-4273-9e19-ad8b7ae5b99e")
 			(effects
 				(font
@@ -961,7 +961,7 @@
 	)
 	(dimension
 		(type orthogonal)
-		(layer "Edge.Cuts")
+		(layer "F.Fab")
 		(uuid "d54e4c6b-b653-4a44-ad6f-d11d58e7104d")
 		(pts
 			(xy 70 49.5) (xy 90 49.5)
@@ -987,7 +987,7 @@
 		)
 		(gr_text "20"
 			(at 80 59.35 0)
-			(layer "Edge.Cuts")
+			(layer "F.Fab")
 			(uuid "d54e4c6b-b653-4a44-ad6f-d11d58e7104d")
 			(effects
 				(font

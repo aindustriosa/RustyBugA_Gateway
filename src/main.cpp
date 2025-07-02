@@ -41,7 +41,8 @@ void setup()
     delay(500);
     Serial.print(".");
   }
-  Serial.println("\nConnected to WiFi!");
+  Serial.print("\nConnected to WiFi with ssid: ");
+  Serial.println(ssid);
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
 
@@ -52,7 +53,8 @@ void setup()
   }
   else
   {
-    Serial.println("mDNS responder started: esp32.local");
+    Serial.print("mDNS responder started with name: ");
+    Serial.println(mdns_hostname);
   }
 
   // Start the UDP server
