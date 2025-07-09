@@ -1,13 +1,18 @@
 /// Wifi UDP server that acts as a serial port gateway
+///
+/// Connections:
+///  - Wifi: UDP connection for users
+///  - Serial (USB serial): Also for user side
+///  - Serial0 (Hardware serial): for the RustyBugA side
 
 #include <Arduino.h>
 #include <WiFi.h>
-#include <ESPmDNS.h> // Add this line
+#include <ESPmDNS.h>
 
 // Wifi credentials
 // secrets.hpp should define WIFI_SSID, WIFI_PASS, and MDNS_HOSTNAME.
 // check secrets_example.hpp for an example
-#include "secrets.hpp" 
+#include "secrets.hpp"
 char *ssid = WIFI_SSID;
 char *pass = WIFI_PASS;
 char *mdns_hostname = MDNS_HOSTNAME;
@@ -31,7 +36,6 @@ void setup()
   {
     ; // Wait for the serial port to connect. Needed for native USB port only
   }
-  Serial.println("Hello, World! This is a test of the Arduino Print class.");
 
   // Connect to Wi-Fi
   WiFi.begin(ssid, pass);
@@ -63,13 +67,11 @@ void setup()
 
   // Initialize Serial_1 for UART1
   Serial_0.begin(115200, SERIAL_8N1, D9, D10);
-  Serial_0.println("Serial_1 initialized on UART1 with RX on D9 and TX on D10");
 }
 
 void loop()
 {
-  // 1. Receive UDP and send to Serial
-  //if (udp.available() > 0)
+  // 1. Receive UDP and send to Serial_0
   {
     int packetSize = udp.parsePacket();
     if (packetSize)
@@ -77,10 +79,7 @@ void loop()
       int len = udp.read(incomingPacket, 255);
       if (len > 0)
       {
-        // Send UDP data to Serial
         Serial_0.write(incomingPacket, len);
-        // Optionally, print for debug
-        Serial.printf("\n[UDP->SERIAL] %d bytes\n", len);
       }
       // Save remote IP/port for replies
       lastRemoteIP = udp.remoteIP();
@@ -88,17 +87,28 @@ void loop()
     }
   }
 
-  // 2. Read Serial and send to last UDP client
-  while (Serial_0.available() > 0 && lastRemotePort != 0)
+  // 2. Read Serial_0 and send to last UDP client and Serial
+  while (Serial_0.available() > 0)
   {
-    uint8_t buf[64];
+    uint8_t buf[128];
     int n = Serial_0.readBytes(buf, sizeof(buf));
 
-    udp.beginPacket(lastRemoteIP, lastRemotePort);
-    udp.write(buf, n);
-    udp.endPacket();
+    Serial.write(buf, n);
 
-    Serial.printf("[SERIAL->UDP] %d bytes\n", n);
+    if (lastRemotePort != 0)
+    {
+      udp.beginPacket(lastRemoteIP, lastRemotePort);
+      udp.write(buf, n);
+      udp.endPacket();
+    }
+  }
+
+  // 3. Read Serial and send to Serial_0
+  while (Serial.available() > 0)
+  {
+    uint8_t buf[128];
+    int n = Serial.readBytes(buf, sizeof(buf));
+    Serial_0.write(buf, n);
   }
 
   delay(1);

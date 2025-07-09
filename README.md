@@ -15,8 +15,7 @@ Make all the connections and:
 ```
 picocom /dev/ttyACM3 -b 115200
 ```
-
-Currently, this interface only prints logs.
+This interface also prints some internal logs from the gateway (like it's IP address at start).
 
 ## Connect from the PC using netcat (like an FTDI but wireless!)
 > Remember to use the jumper when the USB cable is not connected.
